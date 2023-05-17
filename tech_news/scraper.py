@@ -1,5 +1,6 @@
 import requests
 import time
+from parsel import Selector
 
 
 # Requisito 1
@@ -14,13 +15,18 @@ def fetch(url):
         return None
 
 
-# html = fetch("https://blog.betrybe.com/")
-# print(html)
-
-
 # Requisito 2
 def scrape_updates(html_content):
-    """Seu código deve vir aqui"""
+    selector = Selector(text=html_content)
+    URLs = selector.css(".entry-header h2 a::attr(href)").getall()
+    return URLs
+    # A url está no atributo href em um elemento âncora (<a>)
+    # Dentro de um h2 em elementos que possuem classe entry-header
+
+
+# html = fetch("https://blog.betrybe.com/")
+# scrape = scrape_updates(html)
+# print(scrape)
 
 
 # Requisito 3
