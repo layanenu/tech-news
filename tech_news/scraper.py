@@ -66,9 +66,9 @@ def scrape_news(html_content):
     }
 
 
-# html = fetch("https://blog.betrybe.com/tecnologia/site-responsivo/")
-# scrape = scrape_news(html)
-# print(scrape)
+html = fetch("https://blog.betrybe.com/tecnologia/site-responsivo/")
+scrape = scrape_news(html)
+print(scrape)
 
 
 # Requisito 5
