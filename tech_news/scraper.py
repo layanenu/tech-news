@@ -18,20 +18,22 @@ def fetch(url):
 # Requisito 2
 def scrape_updates(html_content):
     selector = Selector(text=html_content)
-    URLs = selector.css(".entry-header h2 a::attr(href)").getall()
-    return URLs
+    URLsNews = selector.css(".entry-header h2 a::attr(href)").getall()
+    return URLsNews
     # A url está no atributo href em um elemento âncora (<a>)
     # Dentro de um h2 em elementos que possuem classe entry-header
 
 
-# html = fetch("https://blog.betrybe.com/")
-# scrape = scrape_updates(html)
-# print(scrape)
-
-
 # Requisito 3
 def scrape_next_page_link(html_content):
-    """Seu código deve vir aqui"""
+    selector = Selector(text=html_content)
+    URLButtonNext = selector.css(".next.page-numbers::attr(href)").get()
+    return URLButtonNext
+
+
+# html = fetch("https://blog.betrybe.com/")
+# scrape = scrape_next_page_link(html)
+# print(scrape)
 
 
 # Requisito 4
