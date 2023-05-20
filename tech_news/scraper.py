@@ -1,8 +1,6 @@
 import requests
 import time
 from parsel import Selector
-from bs4 import BeautifulSoup
-import re
 from tech_news.database import create_news
 
 
@@ -41,28 +39,24 @@ def scrape_next_page_link(html_content):
 # Requisito 4
 def scrape_news(html_content):
     selector = Selector(text=html_content)
-    soup = BeautifulSoup(html_content, 'html.parser')
-
-    get_title = selector.css("h1::text").get()
-    title_clean = re.sub(r'\s+$', '', get_title)
-    # expressao regular para remover espacos vazios ao final da string
-    # vem da biblioteca re
-
-    # o split transforma a string em um lista de strings. Retorna apenas
-    # o primeiro elemento da lista
-
-    get_summary = soup.find('p').text
-    summary_clean = re.sub(r'\s+$', '', get_summary)
+    url = selector.css("link[rel=canonical]::attr(href)").get()
+    title = selector.css("h1::text").get().strip()
+    timestamp = selector.css(".meta-date::text").get()
+    writer = selector.css(".author a::text").get()
+    reading_time = int(selector.css(".meta-reading-time::text")
+                       .get().split(" ")[0])
+    summary = "".join(selector.css(".entry-content > p:nth-of-type(1) *::text")
+                      .getall()).strip()
+    category = selector.css(".label::text").get()
 
     return {
-        "url": selector.css("link[rel=canonical]::attr(href)").get(),
-        "title": title_clean,
-        "timestamp": selector.css(".meta-date::text").get(),
-        "writer": selector.css(".url.fn.n::text").get(),
-        "reading_time": int(selector.css(".meta-reading-time::text")
-                            .get().split(" ")[0]),
-        "summary": summary_clean,
-        "category": selector.css(".label::text").get(),
+        "url": url,
+        "title": title,
+        "timestamp": timestamp,
+        "writer": writer,
+        "reading_time": reading_time,
+        "summary": summary,
+        "category": category,
     }
 
 
